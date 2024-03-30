@@ -10,3 +10,10 @@ def hello_world():
 
 if '_name_' == "_main_":
     app.run()
+
+
+
+import os
+
+fn=r"C:\Users\ca-rodriguez-jaime\FCR-Application>python FCR-Application/Preuve flask.py"
+newfn=fn.replace(os.sep,'/')
