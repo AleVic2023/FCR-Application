@@ -14,10 +14,10 @@ login_manager.login_view = 'login'
 # Utilisateurs avec acces de lecture et acces total
 
 users = {
-    'utilisateur1': {'mot_de_passe': 'motdepasse1', 'acces': 'lecture'},
-    'utilisateur2': {'mot_de_passe': 'motdepasse2', 'acces': 'lecture'},
-    'utilisateur3': {'mot_de_passe': 'motdepasse3', 'acces': 'total'},
-    'utilisateur4': {'mot_de_passe': 'motdepasse4', 'acces': 'total'},
+    'vac01985': {'mot_de_passe': 'motdepasse1', 'acces': 'lecture'},
+    'aleroja8712': {'mot_de_passe': 'motdepasse2', 'acces': 'lecture'},
+    'carola87': {'mot_de_passe': 'motdepasse3', 'acces': 'total'},
+    'calixto0721': {'mot_de_passe': 'motdepasse4', 'acces': 'total'},
 }
 
 
