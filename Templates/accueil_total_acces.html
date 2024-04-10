@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Page principale</title>
+</head>
+<body>
+
+<h1>Notre contenu</h1>
+  {% if current_user.is_authenticated %}
+        <p>Bonjour {{ current_user.id }}!</p>
+        <p><a href="/accueil_total_acces"></a></p>
+
+    {% endif %}
+
+
+</body>
+</html>
+
+
+
+
