@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Debut
+{% endblock %}
+
+{% block h1 %}
+{% if current_user.is_authenticated %}
+<p>Bonjour {{ current_user.id }}!</p>
+<p><a href="/lecture"></a></p>
+<h1>Vous etes connecte comment utilisateur de seule lecture</h1>
+{% endif %}
+{% endblock %}
