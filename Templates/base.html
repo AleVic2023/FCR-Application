@@ -1,11 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %} Notre site Web {% endblock %}</title>
 </head>
 <body>
-{% block content %}
-    {% endblock %}
+
+    <header>
+        {% block h1 %} <h1>FCR FILMS</h1>{% endblock %}
+    </header>
+
+
+    <main>
+        {% block contenu %}
+        Contenu par defaut
+        {% endblock %}
+    </main>
+
+    <footer>
+        2024 tous les droits reserves.
+    </footer>
+
 </body>
 </html>
