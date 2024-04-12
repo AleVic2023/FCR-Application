@@ -1,5 +1,132 @@
+{% extends 'base.html' %}
+
+
+{% block contenu %}
+
+ {% if current_user.is_authenticated %}
+<h1>Bonjour {{ current_user.id }}!</h1>
+<p><a href="/lecture"></a></p>
+<p>Vous etes connecte comment utilisateur acces total</p>
+
+
+<h2>Vous pouvez trouver les listes de clients et des films</h2>
+<h1>Clients</h1>
+
+<!-- Tables -->
+<!-- Table clients -->
+
+<table border="1'">
+    <thead>
+            <tr>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Courriel</th>
+            </tr>
+    </thead>
+    <tbody>
+
+
+            <tr>
+                    <td>Achury</td>
+                    <td>Angelica</td>
+                    <td>aachury@gmail.com</td>
+
+            </tr>
+
+            <tr>
+                    <td>Langlais</td>
+                    <td>Alain</td>
+                    <td>alainlanglois15@hotmail.com</td>
+
+             </tr>
+
+             <tr>
+                    <td>Pauline</td>
+                    <td>Bellanda</td>
+                    <td>bpaul@hotmail.com</td>
+
+            </tr>
+
+            <tr>
+                     <td>Gagnon</td>
+                     <td>Benoit</td>
+                     <td>gbenoit@gmail.com</td>
+
+         </tr>
+    </tbody>
+
+</table>
+
+
+<!-- Table films -->
 
 
 
+<h1> Films</h1>
 
+<table border="1'">
+    <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Duree</th>
+                <th>Categorie</th>
+            </tr>
+    </thead>
+    <tbody>
+
+
+            <tr>
+                <td>Titanic</td>
+                <td>2h48</td>
+                <td>Romantique,Drame</td>
+
+            </tr>
+
+            <tr>
+                 <td>Forrest Gump</td>
+                 <td>2h</td>
+                 <td>Comedie,Drame</td>
+
+            </tr>
+
+            <tr>
+                <td>Halloween</td>
+                <td>1h30</td>
+                <td>Horreur</td>
+
+            </tr>
+
+            <tr>
+                 <td>Kung fu Panda</td>
+                 <td>1h45</td>
+                 <td>Animee,Action,Aventure</td>
+
+            </tr>
+    </tbody>
+
+</table>
+
+
+<br>
+
+<!Bouton creation clients-->
+
+
+     <a href="/creation_client">Creer un client</a>
+<br>
+<br>
+
+    <a href="/modifier_client">Modifier un  client</a>
+<br>
+<br>
+
+    <a href="/supprimer_client">Supprimer un  client</a>
+<br>
+<br>
+
+    <a href="/logout">Déconnexion</a>
+<br>
+
+{% endif %}
+   {% endblock %}
 
