@@ -1,34 +1,33 @@
 {% extends 'base.html' %}
 
-{% block contenu %}
+<!--formulaire-->
 
+{% block contenu %}
 
 <h1>Creez votre nouveau client</h1>
 
+<div>
+    <h3>Entrez les donnees suivantes du client</h3>
 
+    </div>
+ <label for="nfamille">Nom</label>
+ <input id="nfamille" type="text"/>
+    </div>
+<br>
+<br>
 
-<style>
-        /* Styles pour les fenêtres modales */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
+    <div>
+    <label for="pren">Prenom</label>
+    <input id="pren" type="text">
+    </div>
+<br>
+    <div >
+        <label for="cour">Courriel</label>
+        <input id="cour" type="text"/>
+    </div>
+</div>
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-    </style>
+<br>
 
 <a href="/logout">Déconnexion</a>
 {% endblock %}
