@@ -2,29 +2,90 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
+    <title>Se connecter</title>
+
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Bienvenue sur notre application FCR FILMS</h1>
-    <h2>Connexion</h2>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p style="color: red;">{{ message }}</p>
-            {% endfor %}
+    <div class="login-container">
+         <header>
+        <h1 style='color:blue';>FCR FILMS</h1>
+    </header>
+        <h2>Se connecter</h2>
+        {% if error %}
+        <p class="error-message">Utilisateur ou mot de passe incorrects.</p>
         {% endif %}
-    {% endwith %}
-     <form action="/" method="post">
-        <label for="utilisateur">Utilisateur:</label><br>
-        <input type="text" id="utilisateur" name="utilisateur"><br>
-        <label for="mot_de_passe">Mot de passe:</label><br>
-        <input type="password" id="mot_de_passe" name="mot_de_passe"><br><br>
-        <input type="submit" value="Se connecter">
-    </form>
-
-
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="code_utilisateur">Utilisateur:</label>
+                <input type="text" id="code_utilisateur" name="code_utilisateur" required>
+            </div>
+            <div class="form-group">
+                <label for="mot_de_passe">Mot de passe:</label>
+                <input type="mot_de_passe" id="mot_de_passe" name="mot_de_passe" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Se connecter</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
+
+
+
 

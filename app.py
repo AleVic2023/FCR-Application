@@ -1,73 +1,145 @@
-from flask import Flask, render_template, redirect, url_for, flash
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, SelectField
-from wtforms.validators import DataRequired
-from flask_login import UserMixin, LoginManager, login_user, logout_user, login_required
+from flask import Flask, request, render_template
+from flask import flash
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'  # Clé secrète pour la sécurité des formulaires
+app.secret_key = '@l3V1c2024*'
 
-# Configuration de Flask-Login
+
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-# Simulation des utilisateurs
-users = {'admin': {'password': 'admin', 'access_level': 'total'},
-         'user': {'password': 'user', 'access_level': 'lecture'}}
+login_manager.login_view = 'login'
 
 
-# Définition de la classe Utilisateur pour Flask-Login
+
+# Utilisateurs avec acces de lecture et acces total
+
+users = {
+    'vaco1985': {'mot_de_passe':generate_password_hash('motdepasse1'),'acces': 'lecture'},
+    'aleroja8712': {'mot_de_passe':generate_password_hash('motdepasse2'),'acces': 'lecture'},
+    'carola87': {'mot_de_passe':generate_password_hash('motdepasse3'), 'acces': 'total'},
+    'calixto0721': {'mot_de_passe':generate_password_hash('motdepasse4') ,'acces': 'total'},
+}
+
+
+# Liste de clients
+
+clients = [
+    {'Nom': 'Achury', 'Prenom': 'Angelica', 'Courriel': 'aachury@gmail.com'},
+    {'Nom': 'Langlais','Prenom':'Alain','Courriel': 'alainlanglois15@hotmail.com'},
+    {'Nom': 'Pauline', 'Prenom': 'Bellanda', 'Courriel': 'bpaul@hotmail.com'},
+    {'Nom': 'Gagnon', 'Prenom': 'Benoit','Courriel': 'gbenoit@gmail.com'}
+
+]
+
+# Liste des films
+
+films = [
+    {
+        'Nom': 'Titanic',
+        'Duree': '2h28',
+        'Categories': ['Romantique','Drame'],
+        'Acteurs':['Leonardo DiCaprio','Kate Winslet']
+    },
+
+    {
+        'Nom': 'Forrest Gump',
+        'Duree':'2h',
+        'Categories': ['Comedie','Drame'],
+        'Acteurs': ['Tom Hanks','Robin Wright','Haley Joel Osmet'],
+    },
+
+    {
+        'Nom': 'Halloween',
+        'Duree': '1h30',
+        'Categories':['Horreur'],
+        'Acteurs': ['Jamie Lee Curtis','John Carpenter'],
+    },
+
+    {
+        'Nom': 'Kung fu panda',
+        'Duree': '1h45',
+        'Categories': ['Anime','Action','Aventure'],
+        'Acteurs': ['Jack Black','Jackie Chan'],
+    }
+
+]
+
+
+#Class Utilisateur por Flas-Login
 class Utilisateur(UserMixin):
     pass
 
-
 @login_manager.user_loader
-def load_user(user_id):
-    if user_id in users:
-        user = Utilisateur()
-        user.id = user_id
-        return user
+def charger_utilisateur(identifiant):
+    if identifiant in users:
+        utilisateur = Utilisateur()
+        utilisateur.id = identifiant
+        return utilisateur
     return None
 
 
-# Formulaire de connexion
-class LoginForm(FlaskForm):
-    utilisateur = StringField('Nom d\'utilisateur', validators=[DataRequired()])
-    mot_de_passe = PasswordField('Mot de passe', validators=[DataRequired()])
-    submit = SubmitField('Se connecter')
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        utilisateur = form.utilisateur.data
-        mot_de_passe = form.mot_de_passe.data
+    if request.method == 'POST':
+        utilisateur = request.form['utilisateur']
+        mot_de_passe = request.form['mot_de_passe']
 
-        if utilisateur in users and users[utilisateur]['password'] == mot_de_passe:
+        if utilisateur in users and check_password_hash(users[utilisateur]['mot_de_passe'], mot_de_passe):
             utilisateur_obj = Utilisateur()
             utilisateur_obj.id = utilisateur
             login_user(utilisateur_obj)
-            return redirect(url_for('accueil'))
+            acces = users[utilisateur]['acces']
+            if acces == 'total':
+                return  render_template('accueil_total_acces.html')
+            elif acces == 'lecture':
+                return  render_template('lecture.html',)
         else:
             flash('Identifiant ou mot de passe incorrect', 'error')
-            return redirect(url_for('login'))
 
-    return render_template('login.html', form=form)
+    return render_template('login.html')
+
+
+
+@app.route('/lecture')
+@login_required
+def lecture():
+    return render_template("lecture.html")
+
+
+@app.route('/accueil_total_acces')
+@login_required
+def accueil_total_acces():
+    return render_template('accueil_total_acces.html',)
+
 
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    flash('Vous avez ete deconnecte avec succes')
+    return render_template('login.html')
 
-
-@app.route('/accueil')
+@app.route('/creation_client')
 @login_required
-def accueil():
-    return render_template('accueil.html')
+def creation_client():
+    return render_template('creation_client.html', )
+
+
+@app.route('/modification_client')
+@login_required
+def modification_client():
+    return render_template('modification_client.html', )
+
 
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+

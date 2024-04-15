@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+<!--formulaire-->
+
+{% block contenu %}
+
+<h1>Creez votre nouveau client</h1>
+
+<div>
+    <h3>Entrez les donnees suivantes du client</h3>
+
+    </div>
+ <label for="nfamille">Nom</label>
+ <input id="nfamille" type="text"/>
+    </div>
+<br>
+<br>
+
+    <div>
+    <label for="pren">Prenom</label>
+    <input id="pren" type="text">
+    </div>
+<br>
+    <div >
+        <label for="cour">Courriel</label>
+        <input id="cour" type="text"/>
+    </div>
+</div>
+
+<br>
+
+<a href="/logout">Déconnexion</a>
+{% endblock %}

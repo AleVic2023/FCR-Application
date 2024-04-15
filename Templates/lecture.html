@@ -4,9 +4,7 @@
 
 {% block contenu %}
 
- {% if current_user.is_authenticated %}
-<h1>Bonjour {{ current_user.id }}!</h1>
-<p><a href="/lecture"></a></p>
+
 <p>Vous etes connecte comment utilisateur de seule lecture</p>
 
 
@@ -112,7 +110,7 @@
 
     <a href="/logout">Déconnexion</a>
 
-{% endif %}
+
    {% endblock %}
 
 

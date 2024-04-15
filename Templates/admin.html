@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+
+{% block contenu %}
+
+
+<h1>Vous etes connecte comme administrateur</h1>
+    <h2>Liste de Clients</h2>
+
+<br>
+
+
+<h2>Liste des clients</h2>
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Courriel</th>
+        <th>Action</th>
+    </tr>
+    {% for client in clients %}
+    <tr>
+        <td>{{ client.id}}</td>
+        <td>{{ client.nom }}</td>
+        <td>{{ client.prenom }}</td>
+        <td>{{ client.courriel }}</td>
+        <td>
+            <form action="/modifier_client/{{ client.id }}" method="post">
+                <input type="text" name="nom" placeholder="Nouveau nom" value="{{ client.nom }}">
+                <input type="text" name="prenom" placeholder="Nouveau prénom" value="{{ client.prenom }}">
+                <input type="text" name="courriel" placeholder="Nouveau courriel" value="{{ client.courriel }}">
+                <input type="submit" value="Modifier">
+            </form>
+
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+
+<br>
+
+<h2>Ajouter nouveau client</h2>
+    <form action="/creer_client" method="post">
+        <label for="nom">Nom:</label>
+        <input type="text" id="nom" name="nom">
+        <label for="prenom">prenom:</label>
+        <input type="text" id="prenom" name="prenom">
+        <label for="courriel">courriel:</label>
+        <input type="courriel" id="courriel" name="courriel">
+        <button type="submit">creer client</button>
+    </form>
+
+<h1>Supprimer client </h1>
+    <form action="/supprimer_client" method="post">
+        <label for="client_id">Id du client:</label>
+        <input type="number" id="client_id" name="client_id" required>
+        <button type="submit">Supprimer Client</button>
+    </form>
+
+
+<br>
+
+<h2>Liste de Films</h2>
+
+<table border="1">
+    <tr>
+
+        <th>Nom</th>
+        <th>Duree</th>
+        <th>Categorie</th>
+    </tr>
+    {% for film in films %}
+    <tr>
+        <td class="film" data-actors="{{ ', '.join(film.acteurs) }}">{{ film.nom }}</td>
+        <td>{{ film.duree }}</td>
+        <td>{{ film.categorie }}</td>
+
+
+    </tr>
+
+    {% endfor %}
+</table>
+
+<!--Fonctionne pour  afficher les acteurs des films quand la personne met la souris sur le nom film-->
+
+<script>
+
+    var filmElements = document.querySelectorAll('.film');
+    filmElements.forEach(function(element) {
+        element.addEventListener('mouseover', function(event) {
+            var actors = event.target.getAttribute('data-actors');
+            event.target.setAttribute('title', 'Acteurs: ' + actors);
+        });
+    });
+</script>
+
+
+<!--Bouton de deconnexion -->
+
+<br>
+
+    <a href="/logout">Déconnexion</a>
+<br>
+
+{% endblock %}
