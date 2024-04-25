@@ -1,147 +1,148 @@
-import flask_login
-from flask import Flask, request,render_template,redirect,url_for
+mport data
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required,current_user
-from flask import flash
-from werkzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
-app.secret_key = '@l3V1c2024*'
+
+import json # poour povoir avoi l information enregistre
 
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
+# creation des classes
+
+class Personne:
+    def __init__(self, nom, prenom, sexe):
+        self.nom = nom
+        self.prenom = prenom
+        self.sexe = sexe
+
+# La classe Client herite de la classe Personne
+class Client(Personne):
+    def __init__(self, nom, prenom, sexe, date_inscription, courriel, mot_de_passe):
+        super().__init__(nom, prenom, sexe)
+        self.date_inscription = date_inscription
+        self.courriel = courriel
+        self.mot_de_passe = mot_de_passe
+
+# La classe Acteur herite de la classe Personne
+class Acteur(Personne):
+    def __init__(self, nom, prenom, sexe, nom_personnage, date_debut_emploi, date_fin_emploi, cachet):
+        super().__init__(nom, prenom, sexe)
+        self.nom_personnage = nom_personnage
+        self.date_debut_emploi = date_debut_emploi
+        self.date_fin_emploi = date_fin_emploi
+        self.cachet = cachet
+
+# La classe Employe hertie de la classe Personne
+
+class Employe(Personne):
+    def __init__(self, nom, prenom, sex, date_embauche, utilisateur, mot_de_passe, type_acces):
+        super().__init__(nom, prenom, sex)
+        self.date_embauche = date_embauche
+        self.utilisateur = utilisateur
+        self.mot_de_passe = mot_de_passe
+        self.type_acces = type_acces
+
+
+#Creation des autres classes
+
+class CarteCredit:
+    def __init__(self, numero, date_expiration, code_secret):
+        self.numero = numero
+        self.date_expiration = date_expiration
+        self.code_secret = code_secret
+
+class Film:
+    def __init__(self, nom, duree, description, acteurs):
+        self.nom = nom
+        self.duree = duree
+        self.description = description
+        self.acteurs = acteurs
+
+class Categorie:
+    def __init__(self, nom, description):
+        self.nom = nom
+        self.description = description
 
 
 
-# Utilisateurs avec acces de lecture et acces total
-
-users = {
-    'vaco1985': {'mot_de_passe':generate_password_hash('motdepasse1'),'acces': 'lecture'},
-    'aleroja8712': {'mot_de_passe':generate_password_hash('motdepasse2'),'acces': 'lecture'},
-    'carola87': {'mot_de_passe':generate_password_hash('motdepasse3'), 'acces': 'total'},
-    'calixto0721': {'mot_de_passe':generate_password_hash('motdepasse4') ,'acces': 'total'},
-}
+# Maintenant on doit creer une fonctionne pour garder les donnees json pour apres pouvoir les consulter
+def garder_donnees_json(donnees,data):
+    with open(data, 'w') as file:
+        json.dump(donnees, file, indent=4)
 
 
-# Liste de clients
+# Creation fichier jason
+
 
 clients = [
-    {'Nom': 'Achury', 'Prenom': 'Angelica', 'Courriel': 'aachury@gmail.com'},
-    {'Nom': 'Langlais','Prenom':'Alain','Courriel': 'alainlanglois15@hotmail.com'},
-    {'Nom': 'Pauline', 'Prenom': 'Bellanda', 'Courriel': 'bpaul@hotmail.com'},
-    {'Nom': 'Gagnon', 'Prenom': 'Benoit','Courriel': 'gbenoit@gmail.com'}
+    Client("Achury", "Angelica", "F", "2021-04-24", "aachury@gmail.com", "motdepasse"),
+    Client("Langlais", "Alain", "M", "2022-11-25", "alainlanglois15@hotmail.com", "motdepasse1"),
+    Client("Pauline", "Bellanda", "F", "2023-01-15", "bpaul@hotmail.com", "motdepasse2"),
+    Client("Gagnon", "Benoita", "M", "2024-03-07", "gbenoit@gmail.com", "motdepasse3")
+]
+
+acteurs = [
+    Acteur("Pitt", "Brad", "M", "Tyler Durden", "1999-01-01", "2000-12-31", 1000000),
+    Acteur("Jolie", "Angelina", "F", "Lara Croft", "2001-01-01", "2002-12-31", 1500000)
+]
+
+
+employes = [
+
+    Employe("Calixto","Victor","M","2019-09-06","vaco198","password","lecture"),
+    Employe("Rodriguez","Carol","F","2021-02-07","carola87","password1","admin")
 
 ]
 
-# Liste des films
+
+cartescredit = [
+
+    CarteCredit(45130256987,"2025-05-31",523),
+    CarteCredit(19425683216,"2027-01-31",712),
+    CarteCredit(45192412061,"2024-09-31",972),
+    CarteCredit(28091407194,"2026-07-31",824)
+]
+
 
 films = [
-    {
-        'Nom': 'Titanic',
-        'Duree': '2h28',
-        'Categories': ['Romantique','Drame'],
-        'Acteurs':['Leonardo DiCaprio','Kate Winslet']
-    },
-
-    {
-        'Nom': 'Forrest Gump',
-        'Duree':'2h',
-        'Categories': ['Comedie','Drame'],
-        'Acteurs': ['Tom Hanks','Robin Wright','Haley Joel Osmet'],
-    },
-
-    {
-        'Nom': 'Halloween',
-        'Duree': '1h30',
-        'Categories':['Horreur'],
-        'Acteurs': ['Jamie Lee Curtis','John Carpenter'],
-    },
-
-    {
-        'Nom': 'Kung fu panda',
-        'Duree': '1h45',
-        'Categories': ['Anime','Action','Aventure'],
-        'Acteurs': ['Jack Black','Jackie Chan'],
-    }
-
+    Film("Fight Club", 139, "Un employé de bureau insomniaque et un fabricant de savons diaboliques forment un club de lutte clandestin qui évolue beaucoup.", ["Brad Pitt","Edward Norton","Helena Bonhamt"]),
+    Film("Lara Croft: Tomb Raider", 100, "L’aventurière des jeux vidéo Lara Croft prend vie dans un film où elle court contre le temps et les méchants pour récupérer de puissants artefacts anciens", ["Angelina Jolie","Alicia Vikander","Daniel Craig"]),
+    Film("Sous la même étoile", 120, "Depuis son enfance, Hazel a des problèmes respiratoires, l'obligeant à porter un tube à oxygène en permanence. Sur les conseils de sa mère, elle participe à un groupe de soutien, où elle fait la connaissance d'Augustus, qui a perdu une jambe à cause d'un cancer..", ["Shailene Woodley","Ansel Elgort","Nat Wolff"]),
+    Film("Le secret de ses yeux", 153,"Buenos Aires. Benjamin Esposito enquête sur le meurtre violent d'une jeune femme. Vingt-cinq ans plus tard, il décide d'écrire un roman basé sur cette affaire classée dont il a été témoin et protagoniste. Benjamin replonge ainsi dans cette période sombre de l'Argentine où l'ambiance était étouffante et les apparences trompeuses.",["Ricardo Darin", "ESoledad Villamil", "Guillermo Francella"])
 ]
 
+categories = [
+    Categorie("Action", "Des films pleins de scènes d’action passionnantes."),
+    Categorie("Aventure", "Des films qui vous mènent à des voyages passionnants et des découvertes."),
+    Categorie("Romantique", "Films qui vous font réfléchir sur les choses vraiment importantes dans la vie."),
+    Categorie("Drame", "Des films qui traversent l’intrigue et la recherche pour découvrir la vérité.")
+]
 
-#Class Utilisateur por Flas-Login
-class Utilisateur(UserMixin):
-    pass
+# On va lier les donnees dans juste un seul dictionaire
 
-@login_manager.user_loader
-def charger_utilisateur(identifiant):
-    if identifiant in users:
-        utilisateur = Utilisateur()
-        utilisateur.id = identifiant
-        return utilisateur
-    return None
+donnees = {
+    "clients":[client.__dict__ for client in clients],
+    "acteurs":[acteur.__dict__ for acteur in acteurs],
+    "employes":[employe.__dict__ for employe in employes],
+    "cartescredit":[cartecredit.__dict__ for cartecredit in cartescredit],
+    "films": [film.__dict__ for film in films],
+    "categories":[categorie.__dict__ for categorie in categories]
+}
 
-
-
-
-@app.route('/', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        utilisateur = request.form['utilisateur']
-        mot_de_passe = request.form['mot_de_passe']
-
-        if utilisateur in users and check_password_hash(users[utilisateur]['mot_de_passe'], mot_de_passe):
-            utilisateur_obj = Utilisateur()
-            utilisateur_obj.id = utilisateur
-            login_user(utilisateur_obj)
-            acces = users[utilisateur]['acces']
-            if acces == 'total':
-                return  render_template('accueil_total_acces.html')
-            elif acces == 'lecture':
-                return  render_template('lecture.html',)
-        else:
-            flash('Identifiant ou mot de passe incorrect', 'error')
-
-    return render_template('login.html')
+# Je vais garder les donnees dans mon fichier json
+garder_donnees_json(donnees,"data.json")
 
 
+#Apres avoior les donnees dont jai besoin, maintenant je vais faire authentification pour les employes lesquels onnt acces comment admin et juste lecture
 
-@app.route('/lecture')
-@login_required
-def lecture():
-    return render_template("lecture.html")
+# la premiere chose est d
 
 
-@app.route('/accueil_total_acces')
-@login_required
-def accueil_total_acces():
-    return render_template('accueil_total_acces.html',)
-
-
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    flash('Vous avez ete deconnecte avec succes')
-    return render_template('login.html')
-
-@app.route('/creation_client')
-@login_required
-def creation_client():
-    return render_template('creation_client.html', )
-
-
-@app.route('/modification_client')
-@login_required
-def modification_client():
-    return render_template('modification_client.html', )
 
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
 
 
