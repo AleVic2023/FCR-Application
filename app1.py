@@ -1,12 +1,8 @@
 import flask_login
-from flask import Flask, request,render_template,redirect,url_for
+from flask import Flask, request,render_template,redirect,url_for,session
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required,current_user
 from flask import flash
 from werkzeug.security import generate_password_hash, check_password_hash
-
-
-from flask import Flask, render_template, request, session, redirect, url_for
-from flask_login import LoginManager
 import json
 import os
 import jsonify
@@ -272,6 +268,19 @@ def obtenir_films():
     donnees = obtenir_donnees()
     return jsonify(donnees['films'])
 
+
+@app.route('/lecture')
+def lecture():
+    with open('data/base_de_donnees.json', 'r') as f:
+        donnees = json.load(f)
+        clients = donnees['clients']
+        films = donnees['films']
+
+        if 'type_acces' in session and session['type_acces'] == 'lecture':
+            return render_template('lecture.html', clients=clients, films=films)
+        else:
+            return redirect(url_for('login'))  # Redirige vers la page de connexion
+
 @app.route('/logout')
 def logout():
     return render_template('login.html')
@@ -285,6 +294,3 @@ def logout():
 if __name__ == "__main__":
 
     app.run(debug=True)
-
-
-
