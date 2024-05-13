@@ -1,0 +1,184 @@
+{
+    "clients": [
+        {
+            "nom": "Achury",
+            "prenom": "Angelica",
+            "sexe": "F",
+            "id": 0,
+            "date_inscriptionn": "2021-04-24",
+            "courriel": "aachury@gmail.com",
+            "mot_de_passe": "motdepasse1"
+        },
+        {
+            "nom": "Langlais",
+            "prenom": "Alain",
+            "sexe": "M",
+            "id": 1,
+            "date_inscriptionn": "2022-11-25",
+            "courriel": "alainlanglois15@hotmail.com",
+            "mot_de_passe": "motdepasse2"
+        },
+        {
+            "nom": "Pauline",
+            "prenom": "Bellanda",
+            "sexe": "F",
+            "id": 2,
+            "date_inscriptionn": "2023-01-15",
+            "courriel": "bpaul@hotmail.com",
+            "mot_de_passe": "motdepasse3"
+        },
+        {
+            "nom": "Gagnon",
+            "prenom": "Benoit",
+            "sexe": "M",
+            "id": 3,
+            "date_inscriptionn": "2024-03-07",
+            "courriel": "gbenoit@gmail.com",
+            "mot_de_passe": "motdepasse4"
+        }
+    ],
+    "acteurs": [
+        {
+            "nom": "Pitt",
+            "prenom": "Brad",
+            "sexe": "M",
+            "nom_personnage": "Tyler Durden",
+            "date_debut_emploi": "1999-01-01",
+            "date_fin_emploi": "2000-12-31",
+            "cachet": 1000000
+        },
+        {
+            "nom": "Jolie",
+            "prenom": "Angelina",
+            "sexe": "F",
+            "nom_personnage": "Lara Croft",
+            "date_debut_emploi": "2001-01-01",
+            "date_fin_emploi": "2002-12-31",
+            "cachet": 1500000
+        },
+        {
+            "nom": "Bonham",
+            "prenom": "Helena",
+            "sexe": "F",
+            "nom_personnage": "Marla Singer",
+            "date_debut_emploi": "1999-02-15",
+            "date_fin_emploi": "2001-12-31",
+            "cachet": 1300000
+        },
+        {
+            "nom": "Elgort",
+            "prenom": "Ansel",
+            "sexe": "M",
+            "nom_personnage": "Augustus Waters",
+            "date_debut_emploi": "2013-01-18",
+            "date_fin_emploi": "2014-11-27",
+            "cachet": 1800000
+        }
+    ],
+    "employes": [
+        {
+            "nom": "Calixto",
+            "prenom": "Victor",
+            "sexe": "M",
+            "date_embacuhe": "2019-09-06",
+            "code_utilisateur": "vaco1985",
+            "mot_de_passe": "cle123",
+            "type_acces": "admin"
+        },
+        {
+            "nom": "Rodriguez",
+            "prenom": "Carol",
+            "sexe": "F",
+            "date_embacuhe": "2021-02-07",
+            "code_utilisateur": "carola87",
+            "mot_de_passe": "cle456",
+            "type_acces": "lecture"
+        }
+    ],
+    "cartecredits": [
+        {
+            "numero": 45130256987,
+            "date_expiration": "2025-05-31",
+            "code_secret": 523
+        },
+        {
+            "numero": 19425683216,
+            "date_expiration": "2027-01-31",
+            "code_secret": 712
+        },
+        {
+            "numero": 45192412061,
+            "date_expiration": "2024-09-31",
+            "code_secret": 972
+        },
+        {
+            "numero": 28091407194,
+            "date_expiration": "2026-07-31",
+            "code_secret": 824
+        }
+    ],
+    "films": [
+        {
+            "nom": "Fight Club",
+            "duree": 139,
+            "description": "Un employe de bureau insomniaque et un fabricant de savons diaboliques forment un club de lutte clandestin qui evolue beaucoup.",
+            "acteurs": [
+                "Brad Pitt",
+                "Edward Norton",
+                "Helena Bonhamt"
+            ],
+            "categorie": "Action"
+        },
+        {
+            "nom": "Lara Croft: Tomb Raider",
+            "duree": 100,
+            "description": "Laventuriere des jeux video Lara Croft prend vie dans un film ou elle court contre le temps et les mechants pour recuperer de puissants artefacts anciens",
+            "acteurs": [
+                "Angelina Jolie",
+                "Alicia Vikander",
+                "Daniel Craig"
+            ],
+            "categorie": "Aventure"
+        },
+        {
+            "nom": "Sous la meme etoile",
+            "duree": 120,
+            "description": "Depuis son enfance, Hazel a des problemes respiratoires, lobligeant a porter un tube a oxygene en permanence. Sur les conseils de sa mere, elle participe a un groupe de soutien, ou elle fait la connaissance dAugustus, qui a perdu une jambe a cause dun cancer..",
+            "acteurs": [
+                "Shailene Woodley",
+                "Ansel Elgort",
+                "Nat Wolff"
+            ],
+            "categorie": "Romantique"
+        },
+        {
+            "nom": "Le secret de ses yeux",
+            "duree": 153,
+            "description": "Buenos Aires. Benjamin Esposito enquete sur le meurtre violent dune jeune femme. Vingt cinq ans plus tard, il decide decrire un roman base sur cette affaire classee dont il a ete t\u00e9moin et protagoniste. Benjamin replonge ainsi dans cette periode sombre de lArgentine o\u00f9 lambiance etait etouffante et les apparences trompeuses.",
+            "acteurs": [
+                "Ricardo Darin",
+                "ESoledad Villamil",
+                "Guillermo Francella"
+            ],
+            "categorie": "Drame"
+        }
+    ],
+    "categories": [
+        {
+            "nom": "Action",
+            "description": "Des films pleins de scenes daction passionnantes."
+        },
+        {
+            "nom": "Aventure",
+            "description": "Des films qui vous menent a des voyages passionnants et des decouvertes."
+        },
+        {
+            "nom": "Romantique",
+            "description": "Films qui vous font reflechir sur les choses vraiment importantes dans la vie."
+        },
+        {
+            "nom": "Drame",
+            "description": "Des films qui traversent lintrigue et la recherche pour decouvrir la verite."
+        }
+    ]
+}
