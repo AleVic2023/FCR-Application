@@ -1,117 +1,75 @@
-
 {% extends 'base.html' %}
 
 
 {% block contenu %}
 
 
-<p>Vous etes connecte comment utilisateur de seule lecture</p>
+<h1>Vous etes connecte comme administrateur</h1>
+    <h2>Liste de Clients</h2>
+
+<br>
+
+ <h2>Liste des clients</h2>
+<table border="1">
+    <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Courriel</th>
+    </tr>
+    {% for client in clients %}
+    <tr>
+        <td>{{ client.nom }}</td>
+        <td>{{ client.prenom }}</td>
+        <td>{{ client.courriel }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<br>
 
 
-<h2>Vous pouvez trouver les listes de clients et des films</h2>
-<h1>Clients</h1>
+<br>
 
-<!-- Tables -->
-<!-- Table clients -->
+<h2>Liste de Films</h2>
 
-<table border="1'">
-    <thead>
-            <tr>
-                    <th>Nom</th>
-                    <th>Prenom</th>
-                    <th>Courriel</th>
-            </tr>
-    </thead>
-    <tbody>
+<table border="1">
+    <tr>
+        <th>Nom</th>
+        <th>Duree</th>
+        <th>Categorie</th>
+    </tr>
+    {% for film in films %}
+    <tr>
+        <td class="film" data-actors="{{ ', '.join(film.acteurs) }}">{{ film.nom }}</td>
+        <td>{{ film.duree }}</td>
+        <td>{{ film.categorie }}</td>
 
 
-            <tr>
-                    <td>Achury</td>
-                    <td>Angelica</td>
-                    <td>aachury@gmail.com</td>
+    </tr>
 
-            </tr>
-
-            <tr>
-                    <td>Langlais</td>
-                    <td>Alain</td>
-                    <td>alainlanglois15@hotmail.com</td>
-
-             </tr>
-
-             <tr>
-                    <td>Pauline</td>
-                    <td>Bellanda</td>
-                    <td>bpaul@hotmail.com</td>
-
-            </tr>
-
-            <tr>
-                     <td>Gagnon</td>
-                     <td>Benoit</td>
-                     <td>gbenoit@gmail.com</td>
-
-         </tr>
-    </tbody>
-
+    {% endfor %}
 </table>
 
+<!--Fonctionne pour  afficher les acteurs des films quand la personne met la souris sur le nom film-->
 
-<!-- Table films -->
+<script>
 
-
-
-<h1> Films</h1>
-
-<table border="1'">
-    <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Duree</th>
-                <th>Categorie</th>
-            </tr>
-    </thead>
-    <tbody>
-
-            <tr>
-                <td>Titanic</td>
-                <td>2h48</td>
-                <td>Romantique,Drame</td>
-
-            </tr>
-
-            <tr>
-                 <td>Forrest Gump</td>
-                 <td>2h</td>
-                 <td>Comedie,Drame</td>
-
-            </tr>
-
-            <tr>
-                <td>Halloween</td>
-                <td>1h30</td>
-                <td>Horreur</td>
-
-            </tr>
-
-            <tr>
-                 <td>Kung fu Panda</td>
-                 <td>1h45</td>
-                 <td>Animee,Action,Aventure</td>
-             </tr>
+    var filmElements = document.querySelectorAll('.film');
+    filmElements.forEach(function(element) {
+        element.addEventListener('mouseover', function(event) {
+            var actors = event.target.getAttribute('data-actors');
+            event.target.setAttribute('title', 'Acteurs: ' + actors);
+        });
+    });
+</script>
 
 
+<!--Bouton de deconnexion -->
 
-
-
-    </tbody>
-</table>
-
+<br>
 
     <a href="/logout">Déconnexion</a>
-
-
-   {% endblock %}
+<br>
 
 
 
+{% endblock %}
