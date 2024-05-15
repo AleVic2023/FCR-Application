@@ -2,7 +2,6 @@ import flask_login
 from flask import Flask, request,render_template,redirect,url_for,session
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required,current_user
 from flask import flash
-from werkzeug.security import generate_password_hash, check_password_hash
 import json
 import os
 import jsonify
@@ -25,7 +24,7 @@ class Personne:
         self.sexe = sexe
 
 class Client(Personne):
-    compter_id = 0
+    compter_id = 1
     def __init__(self, nom, prenom, sexe, date_inscription, courriel, mot_de_passe):
         super().__init__(nom, prenom, sexe)
         self.id = Client.compter_id #Atriuto id es igual a la variable
@@ -164,6 +163,7 @@ def login():
 
         employe, type_acces = authenticate_employe(code_utilisateur, mot_de_passe)
 
+
         if employe:
             session['type_acces'] = type_acces
             if type_acces == "admin":
@@ -171,9 +171,9 @@ def login():
             elif type_acces == "lecture":
                 return redirect(url_for('lecture'))
         else:
-            return render_template('login.html', erreur='Votre code utilisateur ou mot de passe sont incorrects')
-    else:
-        return render_template('login.html')
+            flash ('Votre code utilisateur ou mot de passe sont incorrects','erreur')
+
+    return render_template('login.html')
 
 def obtenir_donnees():
     route_fichier = os.path.join('data', 'base_de_donnees.json')
@@ -209,43 +209,125 @@ def obtenir_clients():
 
 
 #Route pour creer un nouveau client
-@app.route('/creer_client', methods=['POST'])
+@app.route('/creer_client', methods=['GET','POST'])
 def creer_client():
-    nom = request.form.get('nom')
-    prenom = request.form.get('prenom')
-    courriel = request.form.get('courriel')
+    if request.method == 'POST':
+        nom = request.form.get('nom')
+        prenom = request.form.get('prenom')
+        courriel = request.form.get('courriel')
+        mot_de_passe= request.form.get('mot_de_passe')
+        route_fichier = os.path.join('data', 'base_de_donnees.json')
 
-    donnees = obtenir_donnees()
-    clients = donnees['clients']
-    nouveau_id = len(clients) + 1
-    nouveau_client = {"id": nouveau_id, "nom": nom, "prenom": prenom, "courriel": courriel}
-    clients.append(nouveau_client)
+        with open(route_fichier, 'r') as file:
+            donnees = json.load(file)
 
-    route_fichier = os.path.join('data', 'base_de_donnees.json')
-    with open(route_fichier, 'w') as file:
-        json.dump(donnees, file, indent=4)
+        #Validation de courriel unique
 
-    return redirect('/admin')
+        courriels_existants = [client["courriel"] for client in donnees['clients']]
+        if courriel in courriels_existants:
+            flash("ce courriel existe déjà, s’il vous plaît entrer un courriel différent")
+            return render_template('creer_client.html')
+
+        # Validation de longeur de mot de passe
+        if len(mot_de_passe) < 8:
+            flash("Le mot de passe doit etre compose au moins 8 caracteres")
+            return render_template('creer_client.html')
+
+        # Obtenir ID maximun pour ajouter le nouveau dans la creation de nouveau client
+
+        max_id = max([client["id"] for client in donnees['clients']])
+        nouveau_id = max_id + 1
+        nouveau_client = {"id": nouveau_id, "nom": nom, "prenom": prenom, "courriel": courriel,'mot_de_passe':mot_de_passe}
+        donnees['clients'].append(nouveau_client)
+        donnees['dernier_id_client'] = nouveau_id
+
+        with open(route_fichier, 'w') as file:
+             json.dump(donnees, file, indent=4)
+
+        return redirect('/admin')
+    else:
+        return render_template('creer_client.html')
 
 
+# Route pour modifier un client
 
-
-
-# Ruta para modificar un cliente
-@app.route('/modifier_client/<int:client_id>', methods=['POST'])
+@app.route('/modifier_client/<int:client_id>', methods=['GET','POST'])
 def modifier_client(client_id):
-    donnees = charger_donnees()
-    for client in donnees['clients']:
-        if client['id'] == client_id:
-            client['nom'] = request.form.get('nom')
-            client['prenom'] = request.form.get('prenom')
-            client['courriel'] = request.form.get('courriel')
-            break
-    garder_donnees(donnees)
-    return redirect('/admin')
+    route_fichier = os.path.join('data', 'base_de_donnees.json')
+    if request.method == 'POST':
+        nom = request.form.get('nom')
+        prenom = request.form.get('prenom')
+        courriel = request.form.get('courriel')
+        mot_de_passe = request.form.get('mot de passe')
+
+        with open(route_fichier, 'r') as file:
+         donnees = json.load(file)
+
+        #Chercher le client pour son Id
+        client_trouve = False
+        for client in donnees['clients']:
+            if client['id'] == client_id:
+                client_trouve = True
 
 
-# Ruta para eliminar un cliente
+                # Actualiser les donnees du client
+                client['nom'] = nom
+                client['prenom'] = prenom
+                client['courriel'] = courriel
+                client['mot_de_passe'] = mot_de_passe
+
+        # Validation de courriel unique
+
+                courriels_existants = [client["courriel"] for client in donnees['clients']]
+                if courriel in courriels_existants:
+                    flash("ce courriel existe déjà, s’il vous plaît entrer un courriel différent")
+                    return redirect('/modifier_client/{}'.format(client_id))
+
+        # Validation de longeur de mot de passe
+                if len(mot_de_passe) < 8:
+                     flash("Le mot de passe doit etre compose au moins 8 caracteres")
+                     return redirect('/modifier_client/{}'.format(client_id))
+
+    #Garder le donnees
+                with open(route_fichier, 'w') as file:
+                    json.dump(donnees, file, indent=4)
+
+                return redirect('/admin')
+
+
+    # S il ny a pas un client avec l Id specifie...
+
+                flash("Client non trouvé. Veuillez vérifier l'ID du client.", "error")
+                return redirect('/admin')
+
+    else:
+        #Obtenir les donnees du client selon son Id
+        with open(route_fichier, 'r') as file:
+            donnees = json.load(file)
+
+        for client in donnees['clients']:
+            if client['id'] == client_id:
+                return render_template('modifier_client.html', client=client)
+        flash("Client non trouvé. Veuillez vérifier l'ID du client.", "error")
+        return redirect('/admin')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Route pour supprimer un client a travers l Id
 @app.route('/supprimer_client', methods=['POST'])
 def supprimer_client():
     client_id = int(request.form['client_id'])
@@ -254,7 +336,8 @@ def supprimer_client():
     garder_donnees(donnees)
     return redirect('/admin')
 
-# Función para guardar los datos en el archivo JSON
+
+# Fonction pour garder les donnees dans le fichier json
 def garder_donnees(donnees):
     route_fichier = os.path.join('data', 'base_de_donnees.json')
     with open(route_fichier, 'w') as file:
@@ -262,13 +345,13 @@ def garder_donnees(donnees):
 
 
 
-# Ruta para obtener la lista de películas
+# Route pour obtenir les films
 @app.route('/films')
 def obtenir_films():
     donnees = obtenir_donnees()
     return jsonify(donnees['films'])
 
-
+#Route pour l acces de seule lecture
 @app.route('/lecture')
 def lecture():
     with open('data/base_de_donnees.json', 'r') as f:
@@ -281,14 +364,17 @@ def lecture():
         else:
             return redirect(url_for('login'))  # Redirige vers la page de connexion
 
+
+# Route pour la deconnexion
 @app.route('/logout')
 def logout():
-    return render_template('login.html')
-
-# Creation des fonctions pour la templeate admin.html
-
+    flash('Vous avez ete deconnecte avec succes', 'success')
+    return redirect(url_for('login'))
 
 
+@app.route('/retourner')
+def retourner():
+    return redirect(url_for('admin'))
 
 
 if __name__ == "__main__":
