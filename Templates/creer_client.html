@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+
+{% block contenu %}
+
+<h1>Remplisez le formulaire avec les donnees du nouveau client </h1>
+
+<style>
+        .button-container {
+            display: flex;
+            gap: 2em;
+        }
+    </style>
+
+<h2> Rappelez que le mot de passe doit contenir a moins 8 caracteres</h2>
+
+     {% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    <ul>
+      {% for category, message in messages %}
+        {% if category == 'success' %}
+          <li style="color: green;">{{ message }}</li>
+        {% else %}
+          <li style="color: red;">{{ message }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<br>
+
+                <form action="/creer_client" method="post">
+                     <label for="nom">Nom:</label>
+                     <input type="text" id="nom" name="nom">
+                     <label for="prenom">prenom:</label>
+                     <input type="text" id="prenom" name="prenom">
+                     <label for="courriel">courriel:</label>
+                     <input type="email" id="courriel" name="courriel">
+                     <label for="mot_de_passe">mot de passe:</label>
+                     <input type="mot_de_passe" id="mot_de_passe" name="mot_de_passe">
+                     <button type="submit">creer client</button>
+                </form>
+<br>
+
+<div class="button-container">
+        <a href="/admin">Retourner</a>
+        <a href="/logout">Déconnexion</a>
+    </div>
+
+
+{% endblock %}
+
+
