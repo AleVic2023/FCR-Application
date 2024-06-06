@@ -4,22 +4,19 @@
     <meta charset="UTF-8">
     <title>{% block title %} Notre site Web {% endblock %}</title>
 </head>
-<body>
+<body style="background-color: lightblue;">
 
     <header>
-        {% block h1 %} <h1 style='color:blue';>FCR FILMS</h1>{% endblock %}
+        {% block h1 %} <h1 style="text-align: center; color: blue;">FCR FILMS</h1> {% endblock %}
     </header>
-
 
     <main>
         {% block contenu %}
         Contenu par defaut
         {% endblock %}
     </main>
-<br>
-    <footer>
-        2024 tous les droits reserves.
-    </footer>
+    <br>
+    <footer style="text-align: right; margin: 0 auto;">2024 tous les droits reserves.</footer>
 
 </body>
 </html>
