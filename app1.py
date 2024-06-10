@@ -5,8 +5,8 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from flask import flash
 import json
 import os
-import jsonify
 from app import clients
+from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
@@ -391,7 +391,7 @@ def lecture():
 # Route pour la deconnexion
 @app.route('/logout')
 def logout():
-    flash('Vous avez ete deconnecte avec succes', 'success')
+    flash('Vous avez été déconnecté avec succcès', 'success')
     return redirect(url_for('login'))
 
 
