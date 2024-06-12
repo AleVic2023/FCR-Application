@@ -2,49 +2,91 @@
 
 
 {% block contenu %}
+{% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    <ul>
+      {% for category, message in messages %}
+        {% if category == 'success' %}
+          <li style="color: green;">{{ message }}</li>
+        {% else %}
+          <li style="color: red;">{{ message }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 
 
-<h1>Vous etes connecte comme administrateur</h1>
-    <h2>Liste de Clients</h2>
+<h1 style="text-align: center;">Vous êtes connecté seulement en lecture</h1>
 
+<style>
+         .table-container {
+            margin: 0 auto;
+        }
+        .image-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .image-row img {
+            width: 100px;
+            height: auto;
+            margin: 10px;
+        }
+    </style>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <br>
 
- <h2>Liste des clients</h2>
-<table border="1">
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h2 class="text-center">Liste des clients</h2>
+            <table class="table" border="1">
+
     <tr>
+        <th>Id</th>
         <th>Nom</th>
         <th>Prénom</th>
         <th>Courriel</th>
+
     </tr>
+
     {% for client in clients %}
     <tr>
+        <td>{{ client.id}}</td>
         <td>{{ client.nom }}</td>
         <td>{{ client.prenom }}</td>
         <td>{{ client.courriel }}</td>
+
+
+
+
     </tr>
     {% endfor %}
 </table>
 <br>
 
 
-<br>
-
-<h2>Liste de Films</h2>
-
-<table border="1">
-    <tr>
-        <th>Nom</th>
-        <th>Duree</th>
-        <th>Categorie</th>
-    </tr>
-    {% for film in films %}
-    <tr>
-        <td class="film" data-actors="{{ ', '.join(film.acteurs) }}">{{ film.nom }}</td>
-        <td>{{ film.duree }}</td>
-        <td>{{ film.categorie }}</td>
 
 
-    </tr>
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="text-center">Liste de Films</h1>
+            <table class="table" border="1">
+                <tr>
+                    <th>Nom</th>
+                    <th>Duree</th>
+                    <th>Categorie</th>
+
+                </tr>
+                {% for film in films %}
+                <tr>
+                    <td class="film" data-actors="{{ ', '.join(film.acteurs) }}">{{ film.nom }}</td>
+                    <td>{{ film.duree }}</td>
+                    <td>{{ film.categorie }}</td>
 
     {% endfor %}
 </table>
@@ -62,6 +104,15 @@
     });
 </script>
 
+<div class = "image-row">
+       <img src="{{ url_for('static', filename='Images/Film.jpg') }}" alt="Film">
+       <img src="{{ url_for('static', filename='Images/Film1.jpg') }}" alt="Film 1">
+       <img src="{{ url_for('static', filename='Images/Film2.jpg') }}" alt="Film 2">
+       <img src="{{ url_for('static', filename='Images/Film3.jpg') }}" alt="Film 3">
+   </div>
+
+
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <!--Bouton de deconnexion -->
 
@@ -69,7 +120,5 @@
 
     <a href="/logout">Déconnexion</a>
 <br>
-
-
 
 {% endblock %}
