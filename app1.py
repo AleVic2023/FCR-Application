@@ -5,7 +5,6 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from flask import flash
 import json
 import os
-from app import clients
 from werkzeug.utils import secure_filename
 
 
